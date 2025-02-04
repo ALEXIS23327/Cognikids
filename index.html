@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Infantil</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background">
+        <div class="phone">
+            <h2 id="welcomeMessage">¡Hola!</h2>
+            <div class="buttons">
+                <div class="button" style="background: #3498db;">
+                    <img src="imagenes/memorama.png" alt="Memoria">
+                    <p>Parejas</p>
+                </div>
+                <div class="button" style="background: #2ecc71;">
+                    <img src="imagenes/falta.png" alt="Memoria">
+                    <p>¿Qué falta?</p>
+                </div>
+                <div class="button" style="background: #f39c12;">
+                    <img src="imagenes/cartas.png" alt="Memoria">
+                    <p>Caritas</p>
+                </div>
+                <div class="button" style="background: #e74c3c;">
+                    <img src="imagenes/numeros.png" alt="Memoria">
+                    <p>Escondidos</p>
+                </div>
+                <div class="button" style="background: #9b59b6;">
+                    <img src="imagenes/camino.png" alt="Razonamiento">
+                    <p>Camino Correcto:</p>
+                </div>
+                <div class="button" style="background: #e67e22;">
+                    <img src="imagenes/clasifica.png" alt="Razonamiento">
+                    <p>Clasificación</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("userForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            
+            const nombre = document.getElementById("nombre").value;
+            const edad = document.getElementById("edad").value;
+    
+            try {
+                const response = await fetch("http://localhost/api.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ nombre, edad })
+                });
+    
+                const data = await response.json();
+                console.log("Respuesta de la API:", data);  // Muestra la respuesta en la consola
+    
+                if (response.ok && !data.error) {
+                    alert(data.message);
+                    window.location.href = `index.html?nombre=${encodeURIComponent(nombre)}&edad=${edad}`;
+                } else {
+                    alert("Error en el registro: " + data.error);
+                }
+            } catch (error) {
+                console.error("Error en la solicitud:", error);
+            }
+        });
+    </script>
+    
+</body>
+</html>
